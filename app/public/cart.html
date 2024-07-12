@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrello</title>
+    <link rel="stylesheet" href="cart.css">
+    <script src="cart.js" defer></script>
+</head>
+<body>
+    <header>
+        <div class="logo">Logo</div>
+        <nav>
+            <ul>
+                <li><a href="/home">Home</a></li>
+                <li><a href="#">Categorie</a></li>
+                <li><a href="#">Offerte</a></li>
+                <li><a href="/sell">Vendi</a></li>
+                <li><a href="/profile">Il mio account</a></li>
+                <li><a href="/cart">Carrello</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <div id="user-balance">
+            <h2>Your Balance: 0€</h2>
+        </div>
+        <section class="cart">
+            <h1>Il tuo Carrello</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Prodotto</th>
+                        <th>Prezzo</th>
+                        <th>Quantità</th>
+                        <th>Totale</th>
+                        <th>Rimuovi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Ripetere per ciascun prodotto nel carrello -->
+                    <tr>
+                        <td>
+                            <div class="product-info">
+                                <img src="product1.jpg" alt="Prodotto 1">
+                                <div class="product-details">
+                                    <h3>Nome Prodotto 1</h3>
+                                    <p>Categoria: Esp32</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>€12,99</td>
+                        <td>
+                            <input type="number" value="1" min="1">
+                        </td>
+                        <td>€12,99</td>
+                        <td><button class="remove">Rimuovi</button></td>
+                    </tr>
+                    <!-- Fine ripetizione -->
+                </tbody>
+            </table>
+            <div class="cart-total">
+                <h2>Totale Carrello: €12,99</h2>
+                <button class="checkout">Procedi al Pagamento</button>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2024 E-commerce. Tutti i diritti riservati.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profilo Utente</title>
+    <link rel="stylesheet" href="profile.css">
+    <script src="profile.js"></script>
+</head>
+<body>
+    <header>
+        <div class="logo">Logo</div>
+        <nav>
+            <ul>
+                <li><a href="/home">Home</a></li>
+                <li><a href="#">Categorie</a></li>
+                <li><a href="#">Offerte</a></li>
+                <li><a href="/sell">Vendi</a></li>
+                <li><a href="/profile">Il mio account</a></li>
+                <li><a href="/cart">Carrello</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+
+        <section class="profile">
+            <h1>Il Mio Profilo</h1>
+            <div class="profile-card">
+                <img src="profile-pic.jpg" alt="Foto Profilo" class="profile-pic">
+                <div class="profile-info">
+                    <h2>Mario Rossi</h2>
+                    <p><strong>Email:</strong> mario.rossi@example.com</p>
+                    <p><strong>Indirizzo:</strong> Via Roma, 123, 00100 Roma, Italia</p>
+                    <p><strong>Telefono:</strong> +39 06 1234567</p>
+                    <button class="edit-profile">Modifica Profilo</button>
+                </div>
+            </div>
+
+            <!-- metti un campo per aggiungere soldi al balance -->
+            <div class="balance">
+                <h2>Saldo</h2>
+                <p><strong>Saldo attuale:</strong> 100€</p>
+                <!-- metti un input field per specificare quanti soldi aggiungere -->
+                <input type="number" id="amount" name="amount" placeholder="Inserisci l'importo da aggiungere">
+                <button class="add-balance" onclick="addBalance()">Aggiungi Saldo</button>
+            </div>
+        </section>
+        <section id="orders">
+            <!-- tempalte for orders -->
+            <div class="order">
+                <h2>Ordine #12345</h2>
+                <p><strong>Data:</strong> 01/01/2024</p>
+                <p><strong>Stato:</strong> Confermato</p>
+                <p><strong>Prezzo Totale:</strong> 50€</p>
+            </div>
+        </section>
+        <section id="sold">
+            <!-- tempalte for sold items -->
+            <div class="sold-item">
+                <h2>Prodotto #12345</h2>
+                <p><strong>Data:</strong> 01/01/2024</p>
+                <p><strong>Prezzo:</strong> 50€</p>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2024 E-commerce. Tutti i diritti riservati.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dettagli Prodotto</title>
+    <link rel="stylesheet" href="product-styles.css">
+</head>
+<body>
+    <header>
+        <div class="logo">Logo</div>
+        <nav>
+            <ul>
+                <li><a href="/home">Home</a></li>
+                <li><a href="#">Categorie</a></li>
+                <li><a href="#">Offerte</a></li>
+                <li><a href="/sell">Vendi</a></li>
+                <li><a href="/profile">Il mio account</a></li>
+                <li><a href="/cart">Carrello</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="product-details">
+            <div class="product-image">
+                <img src="product-image.jpg" alt="Nome Prodotto">
+            </div>
+            <div class="product-info">
+                <h1>Nome Prodotto</h1>
+                <p class="category">Categoria: Esp32</p>
+                <p class="price">€12,99</p>
+                <p class="description">
+                    Questa è una descrizione dettagliata del prodotto. Include tutte le informazioni rilevanti
+                    come specifiche tecniche, vantaggi, e come può essere utilizzato.
+                </p>
+                <label for="quantity">Quantità:</label>
+                <input type="number" id="quantity" name="quantity" value="1" min="1">
+                <button class="add-to-cart">Aggiungi al Carrello</button>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2024 E-commerce. Tutti i diritti riservati.</p>
+    </footer>
+</body>
+</html>

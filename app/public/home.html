@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-commerce di Microcontrollori</title>
+    <link rel="stylesheet" href="home.css">
+    <script src="products.js"></script>
+</head>
+<div id="popup-flash" class="modal none">
+    <div class="modal-content"></div>
+</div>
+<body>
+    <header>
+        <div class="logo">Logo</div>
+        <div class="search-bar">
+            <input type="text" placeholder="Cerca microcontrollori, Esp32, Arduino...">
+            <button>Cerca</button>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/home">Home</a></li>
+                <li><a href="#">Categorie</a></li>
+                <li><a href="#">Offerte</a></li>
+                <li><a href="/sell">Vendi</a></li>
+                <li><a href="/profile">Il mio account</a></li>
+                <li><a href="/cart">Carrello</a></li>
+                <li><a id="admin-panel">Admin panel</a></li>
+                <li><a id="logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <section class="hero">
+        <img src="hero-image.jpg" alt="Microcontrollori in uso">
+        <h1>Benvenuti nel tuo negozio di microcontrollori di fiducia</h1>
+        <button>Esplora i prodotti</button>
+    </section>
+
+    <section class="featured-products">
+        <h2>Prodotti in Evidenza</h2>
+        <div id="products" class="product-grid">
+            <!-- Ripetere per ciascun prodotto -->
+            <div class="product">
+                <img src="product1.jpg" alt="Prodotto 1">
+                <h3>Nome Prodotto 1</h3>
+                <p>€99,99</p>
+                
+                <button>Dettagli</button>
+                <div id="quantity-value">
+                    <button class="addtocart">Aggiungi al carrello</button>
+                    <input type="number"  readonly value="1" min="1" max="10" >    
+                </div>
+            </div>
+            <div class="product">
+                <img src="product1.jpg" alt="Prodotto 1">
+                <h3>Nome Prodotto 1</h3>
+                <p>€99,99</p>
+                <button class="addtocart"> Aggiungi al carrello</button>
+                <button>Dettagli</button>
+            </div>
+            <div class="product">
+                <img src="product1.jpg" alt="Prodotto 1">
+                <h3>Nome Prodotto 1</h3>
+                <p>€99,99</p>
+                <button class="addtocart"> Aggiungi al carrello</button>
+                <button>Dettagli</button>
+            </div>
+            <div class="product">
+                <img src="product1.jpg" alt="Prodotto 1">
+                <h3>Nome Prodotto 1</h3>
+                <p>€99,99</p>
+                <button class="addtocart"> Aggiungi al carrello</button>
+                <button>Dettagli</button>
+            </div>
+            <!-- Fine ripetizione -->
+        </div>
+    </section>
+    
+    <section class="categories">
+        <h2>Categorie</h2>
+        <div class="category-list">
+            <!-- Ripetere per ciascuna categoria -->
+            <div class="category">
+                <h3>Esp32</h3>
+            </div>
+            <!-- Fine ripetizione -->
+        </div>
+    </section>
+    
+    <section class="special-offers">
+        <h2>Offerte del Giorno</h2>
+        <div class="offer-carousel">
+            <!-- Ripetere per ciascuna offerta -->
+            <div class="offer">
+                <img src="offer1.jpg" alt="Offerta 1">
+                <h3>Offerta Prodotto 1</h3>
+                <p>€79,99 <span class="original-price">€99,99</span></p>
+                <button>Compra Ora</button>
+            </div>
+            <!-- Fine ripetizione -->
+        </div>
+    </section>
+    
+    <section class="testimonials">
+        <h2>Cosa dicono di noi</h2>
+        <div class="testimonial-carousel">
+            <!-- Ripetere per ciascuna testimonianza -->
+            <div class="testimonial">
+                <p>"Ottimo servizio e prodotti di qualità!" - Marco</p>
+                <p>⭐⭐⭐⭐⭐</p>
+            </div>
+            <!-- Fine ripetizione -->
+        </div>
+    </section>
+    
+    <footer>
+        <div class="footer-links">
+            <a href="#">Chi siamo</a>
+            <a href="#">Contatti</a>
+            <a href="#">Termini e Condizioni</a>
+            <a href="#">Privacy Policy</a>
+        </div>
+        <div class="social-media">
+            <a href="#"><img src="facebook-icon.png" alt="Facebook"></a>
+            <a href="#"><img src="twitter-icon.png" alt="Twitter"></a>
+            <a href="#"><img src="linkedin-icon.png" alt="LinkedIn"></a>
+            <a href="#"><img src="instagram-icon.png" alt="Instagram"></a>
+        </div>
+        <div class="newsletter">
+            <p>Iscriviti alla nostra newsletter per rimanere aggiornato sulle ultime offerte!</p>
+            <input type="email" placeholder="La tua email">
+            <button>Iscriviti</button>
+        </div>
+    </footer>
+</body>
+</html>

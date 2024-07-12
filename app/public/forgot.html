@@ -1,0 +1,102 @@
+<!-- a page to handle forgot password -->
+
+<!DOCTYPE html>
+<html lang="it">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Forgot Password!</title>
+        <link rel="icon" type="image/x-icon" href="/upload/massimo_boldi.ico">
+        <link rel="stylesheet" href="login.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+        <script src="user_handlers.js"></script>
+
+        <!-- <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet"> -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    </head>
+
+<body class="forgot">
+
+
+    <section class="header">
+        <nav>
+            <a href="#"><img src="./images/logo.png"></a>
+            <div class="navbar" id="navBar">
+              <!--      Icona di chiusura del menu per dispositivi mobile: <i class="fa fa-times-circle" onclick="hideMenu()"></i>        -->
+              <i class="fa fa-times-circle" onclick="hideMenu()"></i>
+              <ul>
+                <li><a href="index">HOME</a></li>
+                <li><a href="index#servizi">SERVIZI</a></li>
+                <li><a href="index#about">ABOUT</a></li>
+                <!--<li><a href="signup.html">SIGN UP</a></li>
+                <li><a href="#">LOGIN</a></li> -->
+                <li><a href="#">CHAT</a></li>
+              </ul> 
+            </div>
+            <!--        Icona di apertura del menu per dispositivi mobile:         -->
+            <i class="fa fa-bars" onclick="showMenu()"></i>
+          </nav>
+
+          <!-- Forgot password form -->
+          <div class="form-container">
+            <div class="form login_form">
+                <h2>Forgot password</h2>
+                <div class="input-box">
+                <input type="text" placeholder="Enter your email" id="email" required>
+                <i class="fa fa-user-circle user"></i>
+                </div>
+                <button class="button" id="login-btn" onclick="forgotHandler()">Submit</button>
+                <div class="err-text">
+                    <label id="err-text"></label>
+                </div>
+            </div> 
+    </section>
+
+    <!-- JavaScript for Toggle Menu -->
+    <script>
+
+        var navBar = document.getElementById("navBar");
+      
+        function showMenu(){
+          navBar.style.right = "0";
+        }
+      
+        function hideMenu(){
+          navBar.style.right = "-200px";
+        }
+      
+      
+    </script>
+
+    <!-- Footer -->
+
+    <section class="footer">
+        <h4>Titolo del footer</h4>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sed felis posuere, luctus nunc id, consequat metus.</p>  
+    </section>
+
+
+
+    <!-- Old version starts here -->
+    <!--
+    <div class="wrapper">
+        <h1>Forgot Password</h1>
+        <div class="input-box">
+            <input type="text" placeholder="Insert email" id="email"></input>
+            <i class='bx bxs-user'></i>
+        </div>
+
+        <button class="btn" id="login-btn" onclick="forgotHandler()">Submit</button>
+        <div class="err-text">
+            <label id="err-text"></label>
+        </div>
+
+    </div>
+    -->
+    <!-- Old version ends here -->
+
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>GigaChat</title>
+  <link rel="icon" type="image/x-icon" href="/upload/massimo_boldi.ico">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <script src="resp.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+
+
+<!--   Header e navigation bar e cover   -->
+<section class="header">
+    <nav>
+      <a href="#"><img src="./images/logo.png"></a>
+      <div class="navbar" id="navBar">
+        <!--      Icona di chiusura del menu per dispositivi mobile:   -->
+        <i class="fa fa-times-circle" onclick="hideMenu()"></i>
+        <ul>
+          <li><a href="#">HOME</a></li>
+          <li><a href="#servizi" onclick="hideMenu()">SERVIZI</a></li>
+          <li><a href="#about" onclick="hideMenu()">ABOUT</a></li>
+          <li><a href="signup">SIGN UP</a></li>
+          <li><a href="login">LOGIN</a></li>
+          <li><a href="home">CHAT</a></li>
+        </ul> 
+      </div>
+      <!--        Icona di apertura del menu per dispositivi mobile:         -->
+      <i class="fa fa-bars" onclick="showMenu()"></i>
+    </nav>
+
+    <div class="text-box">
+      <h1>GigaChat.</h1>
+      <h1>Non la solita app di messaggistica In Tempo Reale</h1>
+    </div>
+</section>
+
+
+<!--   Introduzione all'applicazione   -->
+
+<section class="descServizio">
+
+  <div class="row">
+    <div class="col">
+      <h1>GigaChat</h1>
+      <p>GigaChat offre un servizio di messaggistica in tempo reale<br>
+      Il nostro obiettivo è quello di permettere a chiunque di poter messaggiare IN TEMPO REALE!<br>
+      </p>
+    </div>
+    <div class="col">
+      <img src="./images/WhatsApp-IA.jpg">
+    </div>
+  </div>
+
+</section>
+
+
+<!--   Servizi offerti dall'applicazione   -->
+
+<section class="strutturaSito">
+
+  <a id="servizi"><h1>I nostri servizi</h1></a>
+  <div class="row">
+    <div class="funzCol">
+      <h3>Chat in tempo reale</h3>
+      <p>La nostra applicazione permette di chattare in tempo reale grazie all' utilizzo dei WebSocket!</p>
+    </div>
+    <div class="funzCol">
+      <h3>Personalizza il tuo profilo!</h3>
+      <p>Esprimi la tua personalita' sfruttando la nostra funzionalita' di caricare la tuo foto profilo!</p>
+    </div>
+    <div class="funzCol">
+      <h3>Sistema di amicizia</h3>
+      <p>Su GigaChat puoi aggiungere e rimuovere facilmente gli amici e chattare sempre con loro.</p>
+    </div>
+    <!-- <div class="funzCol">
+      <h3>Titolo</h3>
+      <p>Nam tristique eget diam non sodales. Aliquam eu eros id risus fringilla scelerisque sed sed orci.</p>
+    </div> -->
+  </div>
+
+</section>
+
+<!--    Sezione about us    -->
+
+<section class="about">
+
+  <a id="about"><h1>About us</h1></a>
+  <div class="row">
+      <div class="col">
+        <img src="./images/foto_leonardo.jpeg" class="fotoNoi">
+      </div>
+      <div class="col">
+        <h1>Leonardo</h1>
+        <p>Leonardo è il nostro amministratore di sistema, esperto nella gestione e manutenzione dei server che mantengono il nostro sito web di messaggistica istantanea attivo e funzionante 24/7. Con una solida esperienza nella configurazione di reti, sicurezza informatica e ottimizzazione delle prestazioni dei server, Leonardo assicura che il nostro sistema sia sempre protetto e operativo. È il punto di riferimento per la risoluzione di problemi tecnici complessi e lavora costantemente per migliorare l'infrastruttura IT, garantendo un'esperienza utente senza interruzioni.</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <h1>Jacopo</h1>
+      <p>Jacopo è il nostro sviluppatore back-end, responsabile per il cuore pulsante della nostra applicazione di messaggistica. Con una profonda conoscenza dei linguaggi di programmazione come Python, Javascript e Node.js, Jacopo sviluppa e mantiene l'architettura server-side, gestendo i database e assicurandosi che la logica di business funzioni senza intoppi. Il suo lavoro invisibile ma fondamentale rende possibile la gestione efficiente di grandi quantità di dati e la comunicazione rapida tra i nostri utenti.</p>
+    </div>
+    <div class="col">
+      <img src="./images/foto_jacopo.jpeg" class="fotoNoi">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+        <img src="./images/foto_io.jpeg" class="fotoNoi">
+    </div>
+    <div class="col">
+      <h1>Nicolò</h1>
+      <p>Nicolò è il nostro sviluppatore front-end, specializzato nella creazione di interfacce utente intuitive e accattivanti. Con un occhio attento per il design e una competenza nei linguaggi di markup e scripting come HTML, CSS e JavaScript, Nicolò trasforma le idee in realtà visive. Il suo obiettivo è garantire che la nostra applicazione di messaggistica sia non solo funzionale, ma anche piacevole da usare, ottimizzando l'esperienza utente su tutte le piattaforme e dispositivi.</p>
+    </div>
+  </div>
+  
+</section>
+
+<!-- Footer  -->
+
+<section class="footer">
+  <h4>Contatti:</h4>
+  <p>la nostra email: francolama21@gmail.com</p>
+  <p>il nostro numero di telefono: 333 333 3333</p>
+  <p>il nostro indirizzo: Via dello swag 420/gg, vicino a casa di Massimo Boldi in provincia di Caltanissetta(CL) </p>
+</section>
+
+</body>
+</html>
+
