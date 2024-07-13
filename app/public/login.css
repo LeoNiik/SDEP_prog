@@ -17,6 +17,20 @@ body {
     position: relative;
 }
 
+img {
+    max-width: 100%; /* Rende l'immagine responsiva */
+    height: auto; /* Mantiene le proporzioni */
+    border-radius: 10px; /* Arrotonda gli angoli dell'immagine */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Aggiunge un'ombra */
+    transition: transform 0.3s; /* Aggiunge una transizione */
+    /* make it bigger */
+    transform: scale(1.4);
+}
+
+img:hover {
+    transform: scale(1.05); /* Ingrandisce leggermente l'immagine al passaggio del mouse */
+}
+
 nav {
     display: flex;
     padding: 2% 6%;
