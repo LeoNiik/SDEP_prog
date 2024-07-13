@@ -172,11 +172,12 @@ app.get('/api/products/:id', async (req,res) => {
 			dynamicContent += 
 			`<div class="product">
 				<img src="http://${IP}:8000/${vendor_name.rows[0].username}/${product.name}.png">
-				<h3>${product.name}</h3>
-				<p>€${product.price}</p>
-				<p>${product.description}</p>
-				<p>${product.category}</p>
-				<p>${vendor_name.rows[0].username}</p>
+				<h3>name: 		${product.name}</h3>
+				<p>price: 		€${product.price}</p>
+				<p>description: ${product.description}</p>
+				<p>category: 	${product.category}</p>
+				<p>in-stock: 	${product.quantity}</p>
+				<p>vendor: 		${vendor_name.rows[0].username}</p>
 				<div class="quantity-value">
 					<button class="addtocart" id=${product.id}>Aggiungi al carrello</button>
 					<input class='quantity' type="number" value="1" min="1" max="10" >    
@@ -187,11 +188,12 @@ app.get('/api/products/:id', async (req,res) => {
 			dynamicContent += 
 			`<div class="product">
 				<img src="http://${IP}:8000/${vendor_name.rows[0].username}/${product.name}.png">
-				<h3>${product.name}</h3>
-				<p>€${product.price}</p>
-				<p>${product.description}</p>
-				<p>${product.category}</p>
-				<p>${vendor_name.rows[0].username}</p>
+				<h3>name: 		${product.name}</h3>
+				<p>price: 		€${product.price}</p>
+				<p>description: ${product.description}</p>
+				<p>category: 	${product.category}</p>
+				<p>in-stock: 	${product.quantity}</p>
+				<p>vendor: 		${vendor_name.rows[0].username}</p>
 				<button class="remove-product" id=${product.id}>Rimuovi</button>
 			</div>`;
 		}
@@ -216,11 +218,12 @@ app.get('/api/products/:id/category/:category', async (req,res) => {
 			dynamicContent += 
 			`<div class="product">
 				<img src="http://${IP}:8000/${vendor_name.rows[0].username}/${product.name}.png">
-				<h3>${product.name}</h3>
-				<p>€${product.price}</p>
-				<p>${product.description}</p>
-				<p>${product.category}</p>
-				<p>${vendor_name.rows[0].username}</p>
+				<h3>name: 		${product.name}</h3>
+				<p>price: 		€${product.price}</p>
+				<p>description: ${product.description}</p>
+				<p>category: 	${product.category}</p>
+				<p>in-stock: 	${product.quantity}</p>
+				<p>vendor: 		${vendor_name.rows[0].username}</p>
 				<div class="quantity-value">
 					<button class="addtocart" id=${product.id}>Aggiungi al carrello</button>
 					<input class='quantity' type="number" value="1" min="1" max="10" >    
@@ -231,11 +234,12 @@ app.get('/api/products/:id/category/:category', async (req,res) => {
 			dynamicContent += 
 			`<div class="product">
 				<img src="http://${IP}:8000/${vendor_name.rows[0].username}/${product.name}.png">
-				<h3>${product.name}</h3>
-				<p>€${product.price}</p>
-				<p>${product.description}</p>
-				<p>${product.category}</p>
-				<p>${vendor_name.rows[0].username}</p>
+				<h3>name: 		${product.name}</h3>
+				<p>price: 		€${product.price}</p>
+				<p>description: ${product.description}</p>
+				<p>category: 	${product.category}</p>
+				<p>in-stock: 	${product.quantity}</p>
+				<p>vendor: 		${vendor_name.rows[0].username}</p>
 				<button class="remove-product" id=${product.id}>Rimuovi</button>
 			</div>`;
 		}
