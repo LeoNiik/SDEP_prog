@@ -11,6 +11,8 @@ body {
     z-index: 10;
 }
 
+
+
 header {
     display: flex;
     justify-content: space-between;
@@ -43,6 +45,34 @@ header .search-bar button {
     color: #fff;
     border-radius: 0 5px 5px 0;
     cursor: pointer;
+}
+.category-name {
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
+}
+
+.category-name:hover {
+    color: darkblue;
+}
+
+#popup-flash {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    padding: 20px;
+    background-color: white;
+    border: 1px solid black;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    display: none; /* Nascondi il popup di default */
+}
+
+/* Stile per mostrare il popup */
+#popup-flash.show {
+    display: block;
+    z-index: 15;
 }
 
 header nav ul {

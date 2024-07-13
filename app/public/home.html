@@ -7,9 +7,10 @@
     <link rel="stylesheet" href="home.css">
     <script src="products.js"></script>
 </head>
-<div id="popup-flash" class="modal none">
+<div id="popup-flash">
     <div class="modal-content"></div>
 </div>
+
 <body>
     <header>
         <div class="logo">Logo</div>
@@ -20,8 +21,6 @@
         <nav>
             <ul>
                 <li><a href="/home">Home</a></li>
-                <li><a href="#">Categorie</a></li>
-                <li><a href="#">Offerte</a></li>
                 <li><a href="/sell">Vendi</a></li>
                 <li><a href="/profile">Il mio account</a></li>
                 <li><a href="/cart">Carrello</a></li>
@@ -35,6 +34,34 @@
         <img src="hero-image.jpg" alt="Microcontrollori in uso">
         <h1>Benvenuti nel tuo negozio di microcontrollori di fiducia</h1>
         <button>Esplora i prodotti</button>
+    </section>
+
+    <section class="categories">
+        <h2>Categorie</h2>
+        <div class="category-list">
+            <!-- Ripetere per ciascuna categoria -->
+             <!-- cliccabili -->
+            
+            <div class="category">
+                <h3 class="category-name" data-category="tutti">tutti</h3>
+            </div>
+            <div class="category">
+                <h3 class="category-name" data-category="esp32">Esp32</h3>
+            </div>
+            <div class="category">
+                <h3 class="category-name" data-category="arduino">Arduino</h3>
+            </div>
+            <div class="category">
+                <h3 class="category-name" data-category="accessori">Accessori</h3>
+            </div>
+            <div class="category">
+                <h3 class="category-name" data-category="kits">Kits</h3>
+            </div>
+            <div class="category">
+                <h3 class="category-name" data-category="libri">Libri</h3>
+            </div>
+        </div>
+        </div>
     </section>
 
     <section class="featured-products">
@@ -77,42 +104,7 @@
         </div>
     </section>
     
-    <section class="categories">
-        <h2>Categorie</h2>
-        <div class="category-list">
-            <!-- Ripetere per ciascuna categoria -->
-            <div class="category">
-                <h3>Esp32</h3>
-            </div>
-            <!-- Fine ripetizione -->
-        </div>
-    </section>
-    
-    <section class="special-offers">
-        <h2>Offerte del Giorno</h2>
-        <div class="offer-carousel">
-            <!-- Ripetere per ciascuna offerta -->
-            <div class="offer">
-                <img src="offer1.jpg" alt="Offerta 1">
-                <h3>Offerta Prodotto 1</h3>
-                <p>€79,99 <span class="original-price">€99,99</span></p>
-                <button>Compra Ora</button>
-            </div>
-            <!-- Fine ripetizione -->
-        </div>
-    </section>
-    
-    <section class="testimonials">
-        <h2>Cosa dicono di noi</h2>
-        <div class="testimonial-carousel">
-            <!-- Ripetere per ciascuna testimonianza -->
-            <div class="testimonial">
-                <p>"Ottimo servizio e prodotti di qualità!" - Marco</p>
-                <p>⭐⭐⭐⭐⭐</p>
-            </div>
-            <!-- Fine ripetizione -->
-        </div>
-    </section>
+ 
     
     <footer>
         <div class="footer-links">

@@ -202,6 +202,48 @@ app.get('/api/products/:id', async (req,res) => {
 
 	return res.status(200).send({status : "success", content : dynamicContent});
 });
+app.get('/api/products/:id/category/:category', async (req,res) => {
+	const {id,category} = req.params;
+	console.log("category: "+category)
+	const products = await client.query('SELECT * FROM Products WHERE category = $1', [category]);
+	const user = await getUserBySessID(id);
+	let dynamicContent = '';
+	for (const product of products.rows) {
+		//prendo il nome del vendor
+		const vendor_name = await client.query('SELECT username FROM Users WHERE id = $1', [product.vendor_id]);
+		console.log(vendor_name.rows[0].username)
+		if(!user.admin){
+			dynamicContent += 
+			`<div class="product">
+				<img src="http://${IP}:8000/${vendor_name.rows[0].username}/${product.name}.png">
+				<h3>${product.name}</h3>
+				<p>€${product.price}</p>
+				<p>${product.description}</p>
+				<p>${product.category}</p>
+				<p>${vendor_name.rows[0].username}</p>
+				<div class="quantity-value">
+					<button class="addtocart" id=${product.id}>Aggiungi al carrello</button>
+					<input class='quantity' type="number" value="1" min="1" max="10" >    
+				</div>
+			</div>`;
+		}
+		else{
+			dynamicContent += 
+			`<div class="product">
+				<img src="http://${IP}:8000/${vendor_name.rows[0].username}/${product.name}.png">
+				<h3>${product.name}</h3>
+				<p>€${product.price}</p>
+				<p>${product.description}</p>
+				<p>${product.category}</p>
+				<p>${vendor_name.rows[0].username}</p>
+				<button class="remove-product" id=${product.id}>Rimuovi</button>
+			</div>`;
+		}
+	}
+	return res.status(200).send({status : "success", content : dynamicContent});
+});
+
+
 
 app.post('/api/products/delete', async (req,res) => {
 	const {product_id} = req.body;

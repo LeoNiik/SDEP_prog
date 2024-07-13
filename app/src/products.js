@@ -11,6 +11,8 @@ function assignEventListeners(){
     addToCartListeners();
     adminPanelListener();
     logoutListener();
+    categoryListener();
+
 }
 function addToCartListeners(){
     let productsOpt = document.querySelectorAll('.quantity-value')
@@ -83,16 +85,23 @@ async function RefreshProducts(){
     addToCartListeners();
 }
 
-    function flashPopup(content){
+    function flashPopup(content) {
         const modal = document.getElementById('popup-flash');
         let flashcontent = modal.querySelector('.modal-content');
-        // flashcontent.innerHTML = content;
-        modal.style.zIndex = 15
-        console.log(content, modal)
-        sleep(2000);
-        modal.style.zIndex = -1
 
-        // flashcontent.innerHTML = '';
+        // Modifica il contenuto del popup
+        flashcontent.innerHTML = content;
+        // Imposta la visibilità del popup
+        modal.style.zIndex = 15;
+        
+        console.log(content, modal);
+
+        // Usa setTimeout per nascondere il popup dopo 2 secondi
+        setTimeout(() => {
+            modal.style.zIndex = -1;
+            // Pulisci il contenuto del popup se necessario
+            flashcontent.innerHTML = '';
+        }, 2000);
     }
 
 async function getRequest(url){
@@ -140,6 +149,53 @@ async function getProducts() {
     if(!data.content) return null;
     return data.content
 }
+
+// metti un listener sulle categorie
+// quando clicchi su una categoria fai una richiesta al backend
+// che ti restituisce i prodotti di quella categoria
+// e poi li stampi
+
+async function getProductsByCategory(category){
+    const sessid = sessionStorage.getItem('sessid');
+    let data = await getRequest(`http://${URL}:${PORT}/api/products/${sessid}/category/${category}`);
+    if(!data.content) return null;
+    return data.content
+};
+
+
+function categoryListener(){
+    const categories = document.querySelectorAll('.category-name');
+
+    categories.forEach(category => {
+        category.addEventListener('click', async (event) => {
+            const categoryName = event.target.getAttribute('data-category');
+            // Stampa il nome della categoria cliccata nella console
+            console.log(`Categoria cliccata: ${categoryName}`);
+            let resData = null;
+            if (categoryName === 'tutti') {
+                resData = await getProducts();
+            } else {
+                resData = await getProductsByCategory(categoryName);
+            }
+            let dynamicContent = '';
+            dynamicContent += resData;
+            // check if resData is null
+            if (!resData) {
+                dynamicContent = '<p><b>Nessuno prodotto di questa categoria</b></p>';
+                console.log('Errore nella richiesta dei prodotti per categoria');
+                // return;
+            }
+
+            let productsDiv = document.getElementById('products');
+            productsDiv.innerHTML = dynamicContent;
+
+            // flashPopup(resData.content);
+        });
+    });
+}
+
+
+
 
 
 function logout() {
