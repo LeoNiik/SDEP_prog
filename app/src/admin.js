@@ -52,7 +52,21 @@ async function postRequest(url,data){
 function assignEventListeners(){
     deleteProductListener();
     deleteUsersListener();
+    logoutListener();
 }
+
+function logoutListener(){
+
+    let logoutButton = document.getElementById('logout');
+    logoutButton.addEventListener('click', ()=>{
+        //tolgo remember me
+        sessionStorage.removeItem('remember_me');
+        //redirecto a login
+        window.location.href = '/login';
+    });
+
+    
+};
 
 function deleteProductListener(){
     const deleteButtons = document.querySelectorAll('.remove-product');

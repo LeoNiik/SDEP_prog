@@ -691,7 +691,7 @@ app.get('/api/balance/:id', async (req,res)=>{
 	if(!user){
 		return res.status(401).send({status : "error user"});
 	}
-	return res.status(200).send({status : 'success', balance : `<h2>Your Balance: ${user.balance}€</h2>`})	
+	return res.status(200).send({status : 'success', balance : `<h2>Your Balance: ${user.balance}€</h2>`, balance_int: user.balance});	
 });
 
 app.get('/api/get_profile/:id' , async (req,res) => {
@@ -724,9 +724,11 @@ app.get('/api/checkout/:id', async (req,res)=>{
 	}
 	const cart = await client.query('SELECT * FROM Cart WHERE user_id = $1', [user.id]);
 	//ricalcolo il prezzo dei vari prodotti
-	let finalPrice;
+	let finalPrice = 0;
 	for (const product of cart.rows) {
 		const product_info = await client.query('SELECT * FROM Products JOIN Users ON vendor_id=users.id WHERE products.id = $1', [product.product_id]);
+		console.log("product_info.rows[0].price:  "+product_info.rows[0].price);
+		console.log("product.quantity:  "+product.quantity);
 		finalPrice += product_info.rows[0].price * product.quantity
 	}
 	console.log(finalPrice)
@@ -735,17 +737,31 @@ app.get('/api/checkout/:id', async (req,res)=>{
 		return res.status(201).send({status : 'error', description : 'no money'})
 
 	}
+	
 	//delete cart, insert orders with all the information
 	for (const product of cart.rows) {
 		let product_info = await client.query('SELECT * FROM Products JOIN Users ON vendor_id=users.id WHERE products.id = $1', [product.product_id]);
 		product_info = product_info.rows[0]
 		//decrease quantity of a product_info 
 		//update user balance
-		let updatabalance = client.query('UPDATE users SET balance = balance - $1 WHERE id = $2', [finalPrice, user.id])
-		let descreaseStock = client.query('UPDATE products SET quantity = quantity - $1 WHERE id = $2', [product_info.quantity, product_info.id])
-		let order = client.query('INSERT INTO Orders (user_id, vendor_id, product_id, quantity, total) VALUES ($1,$2,$3,$4,$5) ', [user.id, product_info.vendor_id, product_info.id,product.quantity,finalPrice]) 
+		// nuovo balance
+		// checko se sto ordinando piu' della quantita' del prodotto
+		if(product.quantity > product_info.quantity){
+			return res.status(201).send({status : 'error', description : 'quantity not available'})
+		}
+		let new_stock = product_info.quantity - product.quantity
+
+		let descreaseStock = client.query('UPDATE Products SET quantity = $1 WHERE id = $2', [new_stock, product_info.id])
+		// let order = client.query('INSERT INTO Orders (user_id, vendor_id, product_id, quantity, total) VALUES ($1,$2,$3,$4,$5) ', [user.id, product_info.vendor_id, product_info.id,product.quantity,finalPrice]) 
 		let cartdelete = client.query('DELETE FROM cart WHERE cart.id = $1', [product.id])
 	}
+	console.log("USER BALANCE: "+user.balance);
+	console.log("FINAL PRICE: "+finalPrice);
+	let new_balance = user.balance - finalPrice;
+	console.log("NEW BALANCE: "+new_balance);
+	let updateBalance = client.query('UPDATE Users SET balance = $1 WHERE id = $2', [new_balance, user.id])
+
+
 	return res.status(201).send({status : 'success'})
     // user_id INT REFERENCES Users(id) ON DELETE CASCADE NOT NULL,
     // vendor_id INT REFERENCES Users(id) ON DELETE CASCADE NOT NULL,

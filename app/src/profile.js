@@ -80,8 +80,9 @@ async function getSold(){
 async function refreshProfile(){
     console.log('ahdah')
     const profile_info = await getProfile();
-    const orders = await getOrders();
+    // const orders = await getOrders();
     const sold = await getSold();
+    const balance = profile_info.balance_int;
     
     const profileDiv = document.querySelector('.profile');
     const soldDiv = document.getElementById('sold')
@@ -92,8 +93,13 @@ async function refreshProfile(){
     profileDiv.innerHTML = profile_info;
 }
 
+
+
+
 async function addBalance(){
     const id = sessionStorage.getItem('sessid');
+
+    const balance = await getRequest(`http://${URL}:${PORT}/api/balance/${id}`).balance_int;
     let sendData = {
         id : id,
         amount : document.getElementById('amount').value

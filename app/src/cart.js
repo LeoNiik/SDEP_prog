@@ -28,10 +28,10 @@ function removeItemListeners(){
 
 function checkOutCartListener(){
     let button = document.querySelector('.checkout');
-    button.addEventListener('click', (event)=>{
+    button.addEventListener('click', async (event)=>{
         console.log('clicckato')
 
-        checkOutCart();
+        await checkOutCart();
     });
 }
 
@@ -84,7 +84,7 @@ async function deleteItem(product_id){
     const response = await postRequest('http://'+URL+':'+PORT+'/api/delete_item/',data);
     console.log('[DEBUG] deleteItem response:', response)
     //aggiorno il carrello
-    refreshCart();
+    await refreshAll();
     return response;
 }
 
@@ -95,6 +95,20 @@ async function checkOutCart(){
     if(data.status === 'success'){
         console.log(data);
     }
+    // prendo tutti gli id degli elementi del carrello
+    // chiamo la funzione deleteItem per ogni id
+
+    let ids = document.querySelectorAll('.remove-item-btn');
+    console.log(ids)
+    ids.forEach(async (id)=>{
+        // prendo l'id
+        id = id.id;
+
+        console.log("button ID: ", id)
+
+        await deleteItem(id)
+    });
+
 };
 async function refreshBalance(){
     const balance = await getBalance()
