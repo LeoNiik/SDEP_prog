@@ -55,6 +55,13 @@ function assignEventListeners(){
     logoutListener();
 }
 
+
+async function refresh(){
+    await getUsers();
+    await getProducts();
+    assignEventListeners();
+};
+
 function logoutListener(){
 
     let logoutButton = document.getElementById('logout');
@@ -76,15 +83,15 @@ function deleteProductListener(){
             console.log('delete product clicked');
             const product_id = event.target.id
             const body = {product_id};
-
-            const resData = await postRequest(`http://${URL}:${PORT}/api/products/delete`, body);
+            const sessid = sessionStorage.getItem('sessid');
+            const resData = await postRequest(`http://${URL}:${PORT}/api/products/delete/${sessid}`, body);
             console.log(resData);
-            if(resData.status === 'success'){
-                alert('Prodotto rimosso con successo');
+
+            alert(resData.content);
             
-            }else{
-                alert('Errore nella rimozione del prodotto');
-            }
+            // sleepa 2 secondi
+            await sleep(2000);
+            // await refresh();
 
             //refresh
             return;
@@ -99,15 +106,15 @@ function deleteUsersListener(){
             console.log('delete user clicked')
             const user_id = button.getAttribute('id');
             const body = {user_id};
+            const sessid = sessionStorage.getItem('sessid');
 
-            const resData = await postRequest(`http://${URL}:${PORT}/users/delete`, body);
+            const resData = await postRequest(`http://${URL}:${PORT}/users/delete/${sessid}`, body);
             console.log(resData);
-            if(resData.status === 'success'){
-                alert('Utente rimosso con successo');
-            
-            }else{
-                alert('Errore nella rimozione dell\'utente');
-            }
+            alert(resData.content);
+
+            // sleepa 2 secondi
+            await sleep(2000);
+            // await refresh();
 
             //refresh
             return;

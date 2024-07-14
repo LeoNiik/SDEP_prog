@@ -172,12 +172,12 @@ app.get('/api/products/:id', async (req,res) => {
 			dynamicContent += 
 			`<div class="product">
 				<img src="http://${IP}:8000/${vendor_name.rows[0].username}/${product.name}.png">
-				<h3>name: 		${product.name}</h3>
-				<p>price: 		€${product.price}</p>
-				<p>description: ${product.description}</p>
-				<p>category: 	${product.category}</p>
-				<p>in-stock: 	${product.quantity}</p>
-				<p>vendor: 		${vendor_name.rows[0].username}</p>
+				<h3><b>name</b>: 		${product.name}</h3>
+				<p><b>price</b>: 		€${product.price}</p>
+				<p><b>description</b>: ${product.description}</p>
+				<p><b>category</b>: 	${product.category}</p>
+				<p><b>in-stock</b>: 	${product.quantity}</p>
+				<p><b>vendor</b>: 		${vendor_name.rows[0].username}</p>
 				<div class="quantity-value">
 					<button class="addtocart" id=${product.id}>Aggiungi al carrello</button>
 					<input class='quantity' type="number" value="1" min="1" max="10" >    
@@ -188,12 +188,12 @@ app.get('/api/products/:id', async (req,res) => {
 			dynamicContent += 
 			`<div class="product">
 				<img src="http://${IP}:8000/${vendor_name.rows[0].username}/${product.name}.png">
-				<h3>name: 		${product.name}</h3>
-				<p>price: 		€${product.price}</p>
-				<p>description: ${product.description}</p>
-				<p>category: 	${product.category}</p>
-				<p>in-stock: 	${product.quantity}</p>
-				<p>vendor: 		${vendor_name.rows[0].username}</p>
+				<h3><b>name</b>: 		${product.name}</h3>
+				<p><b>price</b>: 		€${product.price}</p>
+				<p><b>description</b>: ${product.description}</p>
+				<p><b>category</b>: 	${product.category}</p>
+				<p><b>in-stock</b>: 	${product.quantity}</p>
+				<p><b>vendor</b>: 		${vendor_name.rows[0].username}</p>
 				<button class="remove-product" id=${product.id}>Rimuovi</button>
 			</div>`;
 		}
@@ -218,12 +218,12 @@ app.get('/api/products/:id/category/:category', async (req,res) => {
 			dynamicContent += 
 			`<div class="product">
 				<img src="http://${IP}:8000/${vendor_name.rows[0].username}/${product.name}.png">
-				<h3>name: 		${product.name}</h3>
-				<p>price: 		€${product.price}</p>
-				<p>description: ${product.description}</p>
-				<p>category: 	${product.category}</p>
-				<p>in-stock: 	${product.quantity}</p>
-				<p>vendor: 		${vendor_name.rows[0].username}</p>
+				<h3><b>name</b>: 		${product.name}</h3>
+				<p><b>price</b>: 		€${product.price}</p>
+				<p><b>description</b>: ${product.description}</p>
+				<p><b>category</b>: 	${product.category}</p>
+				<p><b>in-stock</b>: 	${product.quantity}</p>
+				<p><b>vendor</b>: 		${vendor_name.rows[0].username}</p>
 				<div class="quantity-value">
 					<button class="addtocart" id=${product.id}>Aggiungi al carrello</button>
 					<input class='quantity' type="number" value="1" min="1" max="10" >    
@@ -234,12 +234,12 @@ app.get('/api/products/:id/category/:category', async (req,res) => {
 			dynamicContent += 
 			`<div class="product">
 				<img src="http://${IP}:8000/${vendor_name.rows[0].username}/${product.name}.png">
-				<h3>name: 		${product.name}</h3>
-				<p>price: 		€${product.price}</p>
-				<p>description: ${product.description}</p>
-				<p>category: 	${product.category}</p>
-				<p>in-stock: 	${product.quantity}</p>
-				<p>vendor: 		${vendor_name.rows[0].username}</p>
+				<h3><b>name</b>: 		${product.name}</h3>
+				<p><b>price</b>: 		€${product.price}</p>
+				<p><b>description</b>: ${product.description}</p>
+				<p><b>category</b>: 	${product.category}</p>
+				<p><b>in-stock</b>: 	${product.quantity}</p>
+				<p><b>vendor</b>: 		${vendor_name.rows[0].username}</p>
 				<button class="remove-product" id=${product.id}>Rimuovi</button>
 			</div>`;
 		}
@@ -249,14 +249,18 @@ app.get('/api/products/:id/category/:category', async (req,res) => {
 
 
 
-app.post('/api/products/delete', async (req,res) => {
+app.post('/api/products/delete/:sessid', async (req,res) => {
 	const {product_id} = req.body;
+	const user = await getUserBySessID(req.params.sessid);
+	if (!user.admin){
+		return res.status(401).send({status : "error", content : "You are not an admin, you cannot delete items"});
+	}
 
 	const result = await client.query('DELETE FROM Products WHERE id = $1', [product_id]);
 	if (!result){
-		return res.status(401).send({status : "error"});
+		return res.status(401).send({status : "error", content: "Product not found"});
 	}
-	return res.status(201).send({status : "success"});
+	return res.status(201).send({status : "success", content : "Product successfully deleted"});
 });
 
 
@@ -391,14 +395,18 @@ app.get('/users', async (req,res) => {
 
 });
 
-app.post('/users/delete', async (req,res) => {
+app.post('/users/delete/:sessid', async (req,res) => {
 	const {user_id} = req.body;
+	const user = await getUserBySessID(req.params.sessid);
+	if (!user.admin){
+		return res.status(401).send({status : "error", content : "You are not an admin, you cannot delete users"});
+	}
 
 	const result = await client.query('DELETE FROM Users WHERE id = $1', [user_id]);
 	if (!result){
-		return res.status(401).send({status : "error"});
+		return res.status(401).send({status : "error", content: "User not found"});
 	}
-	return res.status(201).send({status : "success"});
+	return res.status(201).send({status : "success", content : "User successfully deleted"});
 });
 
 
