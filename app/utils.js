@@ -10,7 +10,7 @@ function extractTime(dateString) {
     return `${hours}:${minutes}`;
 }
 
-//genera una stringa di 32 caratteri alfanumerici
+//genera una stringa di 32 caratteri alfanumerici, utilizzata per generare un token di accesso (il sessid)
 function generateRandomString(length) {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';

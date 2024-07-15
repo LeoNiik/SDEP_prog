@@ -1,6 +1,7 @@
 
 const IP ='ecommerce.web';
 
+// esegui quando il documento viene caricato
 document.addEventListener("DOMContentLoaded", function() {
 
     authSessid();
@@ -15,6 +16,8 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
 });
+
+// funzione per autenticare l'utente tramite il sessid
 
 function authSessid(){
     //prendo il sessid
@@ -33,6 +36,7 @@ function authSessid(){
             },
             body: JSON.stringify(data) 
             };
+            // faccio una richiesta POST al server per verificare il sessid
             fetch('http://'+IP+':8000/api/auth/sessid', options)
             .then(response => response.json())
             .then(data => {
@@ -45,6 +49,8 @@ function authSessid(){
         }
     }
 }
+
+// funzione per effettuare il recupero della password
 function forgotHandler() {
     email = document.getElementById('email').value
 
@@ -74,7 +80,7 @@ function forgotHandler() {
     })
 }
 
-
+// funzione per gesitre il login
 function loginHandler() {
 
     username = document.getElementById('username').value
@@ -121,6 +127,7 @@ function loginHandler() {
     });
 }
 
+// funzione per effettuare il reset della password
 function reset_pswdHandler() {
 
     let password = document.getElementById('password').value;
@@ -186,6 +193,7 @@ function getRequestWithTimeout(url) {
 
 
 
+// funzione per effettuare la registrazione
 function signupHandler() {
 
     let username = document.getElementById('username').value;

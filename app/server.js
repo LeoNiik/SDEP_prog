@@ -1,22 +1,28 @@
 'use strict';
+// tutte le librerie necessarie
+// per salvare le immagini dei prodotti
 const path = require('path');
+// per creare il server
 const express = require('express');
+// per gestire l' upload di immagini
 const fileUpload = require('express-fileupload');
+// per comunicare col database postgres
 const { Client } = require('pg');
+// per parsare i body delle richieste
 var bodyParser = require('body-parser')
+// per hashare le password
 const { createHash } = require('crypto');
-const utils = require('./utils');
-const nodemailer = require('nodemailer');
-const { exec } = require('child_process');
 
+const utils = require('./utils');
+// per inviare email (di conferma e recupero password)
+const nodemailer = require('nodemailer');
+// per eseguire comandi shell
+const { exec } = require('child_process');
+// per leggere e scrivere file
 const fs = require('fs');
 
 
 
-
-
-//const result = createHash('sha256').update("bacon").digest('hex');
-// Constants
 const PORT = 80;
 const HOST = '0.0.0.0';
 const IP = 'ecommerce.web'; //just for testing
@@ -46,12 +52,15 @@ const app = express();
 const expressServer = app.listen(PORT, HOST);
 
 
+// Serve static files
 app.use(express.static('upload'))
 app.use(express.static('public'));
 app.use(express.static('src'));
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: false }));
 
+
+// per autorizzare le richieste da qualsiasi origine
 app.use((req, res, next) => {
 	res.header("Access-Control-Allow-Origin", "*");
 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -70,6 +79,7 @@ async function getUserBySessID(id) {
 	return user;
 }
 
+// inizializzo il mailer
 const transporter = nodemailer.createTransport({
 	service: "Gmail",
 	host: "smtp.gmail.com",
@@ -81,7 +91,7 @@ const transporter = nodemailer.createTransport({
 	},
 });
 
-//send mail given the email and the message
+// manda le mail dati : mittente, destinatario, oggetto e testo
 const sendEmail = (to, subject, text) => {
 	console.log(to);
 	const mailOptions = {
@@ -100,7 +110,7 @@ const sendEmail = (to, subject, text) => {
 };
   
 
-
+// genera un sessid univoco e lo mette nel database
 async function generateUniqueID() {
 	let id;
     let isUnique = false;
@@ -116,6 +126,7 @@ async function generateUniqueID() {
 	return id;
 }
 
+// per cambiare il nome dell' utente
 app.post('/api/change_name/:id', async (req,res) => {
 	const sessid = req.params.id;
 	console.log('[DEBUG] /api/change_name::req.body - '+ req.body.name);
@@ -147,13 +158,7 @@ app.post('/api/change_name/:id', async (req,res) => {
 	}
 });
 
-/* <div class="product">
-<img src="product1.jpg" alt="Prodotto 1">
-<h3>Nome Prodotto 1</h3>
-<p>€99,99</p>
-<button class="addtocart">Aggiungi al carrello</button>
-<button>Dettagli</button>
-</div> */
+// funzione per ritornare tutti i prodotti 
 app.get('/api/products/:id', async (req,res) => {
 	const {id} = req.params;
 	const products = await client.query('SELECT * FROM Products');
@@ -167,6 +172,8 @@ app.get('/api/products/:id', async (req,res) => {
 		//prendo il nome del vendor
 		const vendor_name = await client.query('SELECT username FROM Users WHERE id = $1', [product.vendor_id]);
 		console.log(vendor_name.rows[0].username)
+
+		// se questa richiesta la fa l'admin puo' rimuovere i prodotti
 
 		if(!user.admin){
 			dynamicContent += 
@@ -200,10 +207,10 @@ app.get('/api/products/:id', async (req,res) => {
 
 	}
 	
-
-
 	return res.status(200).send({status : "success", content : dynamicContent});
 });
+
+// endpoint per ritornare i prodotti di una categoria, molto simile ad /api/products
 app.get('/api/products/:id/category/:category', async (req,res) => {
 	const {id,category} = req.params;
 	console.log("category: "+category)
@@ -249,6 +256,7 @@ app.get('/api/products/:id/category/:category', async (req,res) => {
 
 
 
+// endpoint per eliminare un prodotto, (solo per gli admin)
 app.post('/api/products/delete/:sessid', async (req,res) => {
 	const {product_id} = req.body;
 	const user = await getUserBySessID(req.params.sessid);
@@ -264,7 +272,7 @@ app.post('/api/products/delete/:sessid', async (req,res) => {
 });
 
 
-
+//  endpoint per eliminare gli oggetti dal carrello
 app.post('/api/delete_item/' , async (req,res) => {
 	const {sessid,product_id} = req.body
 	const user = await getUserBySessID(sessid);
@@ -279,13 +287,8 @@ app.post('/api/delete_item/' , async (req,res) => {
 	return res.status(201).send({status : "success"});
 });
 
-// var fs = require('fs');
-// var dir = './tmp/but/then/nested';
 
-// if (!fs.existsSync(dir)){
-//     fs.mkdirSync(dir, { recursive: true });
-// }
-
+// endpoint per gestire il form di vendita di un prodotto
 app.post('/sell', async (req,res) => {
 	const img = req.files.productImage;
 	console.log(img);
@@ -316,31 +319,35 @@ app.post('/sell', async (req,res) => {
 	//rinomino l' immagine con il nome del prodotto
 	img.name = productName + '.png';
 	img.mv(__dirname + '/upload/' + user.username + '/' + img.name);
-	return res.status(201).send({status : "success"});
+	return res.status(201).redirect('/home');
 });
 
+// endpoint per visualizzare gli oggetti venduti
 app.get('/api/sold/:id', async  (req,res)=>{
 	const id = req.params.id;
-	console.log(id)
 	const user = await getUserBySessID(id);
-	console.log(user)
 	if(!user){
 		return res.status(201).send({status : 'error user'})
 	}
-	const result = client.query('SELECT * from orders WHERE vendor_id = $1', [user.id])
-	if (!result.rows){
-		return res.status(201).send({status : 'error', description : 'no sold yet'})
+	const result = await client.query('SELECT orders.id,orders.quantity,orders.created_at,orders.total,products.name FROM orders JOIN products ON product_id = products.id WHERE orders.vendor_id = $1', [user.id])
+	let dinamicContent = '<h1>Your sold items</h1>'
+	if (result.rows.length === 0){
+		dinamicContent += `No items sold yet`
+		return res.status(201).send({status : 'error', description : 'no sold yet', content : dinamicContent})
 	}
 	//respond dinamic content
-	let dinamicContent = ''
 	result.rows.forEach(order => {
 		console.log(JSON.stringify(order));
 
 		dinamicContent += 
-		'\
-		\
-		\
-		'
+		`<div class="sold">
+			<h2>Ordine ${order.id}</h2>
+			<p><strong>Prodotto:</strong>${order.name}</p>
+			<p><strong>Quantità:</strong>${order.quantity}</p>
+			
+			<p><strong>Data:</strong> ${order.created_at}</p>
+			<p><strong>Prezzo Totale:</strong> ${order.total}€</p>
+		</div>`
 	}); 
 	return res.status(200).send({
 		status : 'success',
@@ -348,29 +355,36 @@ app.get('/api/sold/:id', async  (req,res)=>{
 	})
 })
 
+// endpoint per visualizzare gli ordini che ho fatto
 app.get('/api/orders/:id', async  (req,res)=>{
 	const id = req.params.id;
-	console.log(id)
 
 	const user = await getUserBySessID(id);
 	if(!user){
 		return res.status(201).send({status : 'error user'})
 	}
-	const result = client.query('SELECT * from orders WHERE user_id = $1', [user.id])
-	if (!result.rows){
-		return res.status(201).send({status : 'error', description : 'no orders yet'})
+	const result = await client.query('SELECT orders.id,orders.quantity,orders.created_at,orders.total,products.name from orders JOIN products ON product_id = products.id WHERE orders.user_id = $1', [user.id])
+	let dinamicContent = '<h1>Your Orders</h1>'
+	if (result.rows.length === 0){
+		dinamicContent += `No Ordersss yet`
+		return res.status(201).send({status : 'error', description : 'no orders yet' , content : dinamicContent})
 	}
+	console.log(result.rows)
 	//respond dinamic content
-	let dinamicContent = ''
-	result.rows.forEach(order => {
-		console.log(JSON.stringify(order));
-
+	result.rows.forEach((order) => {
+		console.log(`[DEBUG]orders - `+ JSON.stringify(order));
+		
+		
 		dinamicContent += 
-		'\
-		\
-		\
-		'
+		`<div class="orders">
+			<h2>Ordine ${order.id}</h2>
+			<p><strong>Prodotto:</strong>${order.name}</p>
+			<p><strong>Quantità:</strong>${order.quantity}</p>
+			<p><strong>Data:</strong> ${order.created_at}</p>
+			<p><strong>Prezzo Totale:</strong> ${order.total}€</p>
+		</div>`
 	}); 
+	console.log(dinamicContent)
 	return res.status(200).send({
 		status : 'success',
 		content : dinamicContent
@@ -378,8 +392,16 @@ app.get('/api/orders/:id', async  (req,res)=>{
 	
 })
 
-app.get('/users', async (req,res) => {
+
+// endpoint per visualizzare gli utenti (solo per gli admin)
+app.get('/users/:id', async (req,res) => {
 	const users = await client.query('SELECT * FROM Users');
+
+	const sessid = req.params.id;
+	const user = await getUserBySessID(sessid);
+	if (!user.admin){
+		return res.status(401).send({status : "error", content : "You are not an admin, you cannot see users"});
+	}
 
 	let dynamicContent = '';
 	for (const user of users.rows) {
@@ -395,6 +417,7 @@ app.get('/users', async (req,res) => {
 
 });
 
+// endpoint per eliminare un utente (solo per gli admin)
 app.post('/users/delete/:sessid', async (req,res) => {
 	const {user_id} = req.body;
 	const user = await getUserBySessID(req.params.sessid);
@@ -410,6 +433,7 @@ app.post('/users/delete/:sessid', async (req,res) => {
 });
 
 
+// endpoint per aggiungere saldo
 app.post('/api/add_balance' , async (req,res) => {
 	const {id, amount} = req.body;
 	const user = await getUserBySessID(id);
@@ -426,6 +450,8 @@ app.post('/api/add_balance' , async (req,res) => {
 	return res.status(201).send({status : "success"});
 });
 
+
+// endpoint per aggiungere un prodotto al carrello
 app.post('/api/add_to_cart' , async (req,res) => {
 	const {id, product_id, quantity} = req.body;
 	console.log(req.body)
@@ -439,6 +465,12 @@ app.post('/api/add_to_cart' , async (req,res) => {
 	//check if product_id is alalready in the cart
 	const check = await client.query('SELECT * FROM Cart WHERE user_id = $1 AND product_id = $2', [user.id, product_id]);
 	let result;
+	//check if the requested quantity is over the stock quantity  
+	const stock = await client.query('SELECT quantity FROM Products WHERE id = $1', [product_id]);
+	if(stock.rows[0].quantity < quantity){
+		return res.status(401).send({status : "error", description : "quantity not available"});
+	}
+	
 	if(check.rows.length === 0){
 		result = await client.query('INSERT INTO Cart (user_id, product_id, quantity) VALUES ($1,$2,$3)', [user.id, product_id, quantity]);
 	}
@@ -460,29 +492,7 @@ app.post('/api/add_to_cart' , async (req,res) => {
 
 
 
-/* <tr>
-<td>
-	<div class="product-info">
-		<img src="product1.jpg" alt="Prodotto 1">
-		<div class="product-details">
-			<h3>Nome Prodotto 1</h3>
-			<p>Categoria: Esp32</p>
-		</div>
-	</div>
-</td>
-<td>€12,99</td>
-<td>
-	<input type="number" value="1" min="1">
-</td>
-<td>€12,99</td>
-<td><button class="remove">Rimuovi</button></td>
-</tr> */
- 
-//send index.html as response for GET /
-app.get('/', function(req, res) {
-	res.sendFile(path.join(__dirname, 'public/index.html'));
-});
-					
+// funzione che ritorna l' utente dato il suo username
 async function getUser(username){
 
 	if (!username) {
@@ -497,15 +507,15 @@ async function getUser(username){
 	return user;
 }
 	
+// funzione che confronta la password hashata inserita con quella salvata nel database, usata durante il login
 function comparePasswd(passwd, hash){
 	const hashedPassword = createHash('sha256').update(passwd).digest('hex');
 	return hashedPassword === hash;
 }
 
-// Placeholder for POST /api/login route
+// funzione per il login
 app.post('/api/login', async (req, res) => {
 	
-	// Handle login logic here
 	
 	const { username, password} = req.body;
 	try {
@@ -529,11 +539,12 @@ app.post('/api/login', async (req, res) => {
 		}
 
 		// Se le credenziali sono valide, autentica l'utente
+		//genera il sessid
+		//aggiorna il sessid
 		let sessionid = utils.generateRandomString(32);
 		await client.query('UPDATE Users SET session_id = $1 WHERE username = $2', [sessionid, username]);
 
-		//genera il sessid
-		//aggiorna il sessid
+
 		//console loggo
 		console.log('Utente autenticato:');
 		console.log('Sessid:', sessionid);
@@ -546,6 +557,7 @@ app.post('/api/login', async (req, res) => {
 	}
 });
 
+// funzione che gestisce l'autenticazione tramite sessid
 app.post('/api/auth/sessid', async (req,res) => {
 	const {sessid} = req.body;
 	try {
@@ -562,7 +574,7 @@ app.post('/api/auth/sessid', async (req,res) => {
 });
 
 
-
+// funzione per resettare la password
 app.post('/api/reset', async (req,res) => {
 	const {password,verify_token} = req.body;
 	
@@ -573,6 +585,7 @@ app.post('/api/reset', async (req,res) => {
 	}
 
 	try {
+		// checko se il token e' valido
 		const user = await client.query('SELECT * FROM Users WHERE verify_token = $1', [verify_token]);
 		if(user.rows.length === 0){
 			return res.status(401).send({status : "session_id not found"});
@@ -591,6 +604,7 @@ app.post('/api/reset', async (req,res) => {
 });
 
 
+// funzione per gestire il forgot della password (serve a mandare una mail per resettare la password)
 app.post('/api/forgot', async (req,res) => {
 	const { email} = req.body;
 	console.log(email);
@@ -617,7 +631,8 @@ app.post('/api/forgot', async (req,res) => {
 		return res.status(500).send({status : "internal error"});
 	}
 });
-// Placeholder for POST /signup route
+
+// endpoint per la registrazione
 app.post('/api/signup', async (req, res) => {
 	
 	const { username, password , email} = req.body;
@@ -686,7 +701,7 @@ app.post('/api/signup', async (req, res) => {
 
 
 
-
+// endpoint per uploadare un immagine
 app.post('/upload', async (req, res) => {
     const image  = req.files.image;
 	const id = req.body.sessid;
@@ -718,27 +733,8 @@ app.post('/upload', async (req, res) => {
     res.sendStatus(200);
 });
 
-/* <tbody>
-	<!-- Ripetere per ciascun prodotto nel carrello -->
-	<tr>
-		<td>
-			<div class="product-info">
-				<img src="product1.jpg" alt="Prodotto 1">
-				<div class="product-details">
-					<h3>Nome Prodotto 1</h3>
-					<p>Categoria: Esp32</p>
-				</div>
-			</div>
-		</td>
-		<td>€12,99</td>
-		<td>
-			<input type="number" value="1" min="1">
-		</td>
-		<td>€12,99</td>
-		<td><button class="remove">Rimuovi</button></td>
-	</tr>
-	<!-- Fine ripetizione -->
-</tbody> */
+
+// endpoint per ritornare il saldo del portafoglio
 app.get('/api/balance/:id', async (req,res)=>{
 	const {id} = req.params;
 	const user = await getUserBySessID(id);
@@ -748,6 +744,7 @@ app.get('/api/balance/:id', async (req,res)=>{
 	return res.status(200).send({status : 'success', balance : `<h2>Your Balance: ${user.balance}€</h2>`, balance_int: user.balance});	
 });
 
+// endpoint per ritornare il profilo dell' utente
 app.get('/api/get_profile/:id' , async (req,res) => {
 	const {id} = req.params;
 	const user = await getUserBySessID(id);
@@ -770,6 +767,7 @@ app.get('/api/get_profile/:id' , async (req,res) => {
 	return res.status(200).send({status : "success", content : dynamicContent});
 });
 
+// endpoint per fare il checkout del carrello
 app.get('/api/checkout/:id', async (req,res)=>{
 	const {id} = req.params;
 	const user = await getUserBySessID(id);
@@ -806,7 +804,7 @@ app.get('/api/checkout/:id', async (req,res)=>{
 		let new_stock = product_info.quantity - product.quantity
 
 		let descreaseStock = client.query('UPDATE Products SET quantity = $1 WHERE id = $2', [new_stock, product_info.id])
-		// let order = client.query('INSERT INTO Orders (user_id, vendor_id, product_id, quantity, total) VALUES ($1,$2,$3,$4,$5) ', [user.id, product_info.vendor_id, product_info.id,product.quantity,finalPrice]) 
+		let order = client.query('INSERT INTO Orders (user_id, vendor_id, product_id, quantity, total) VALUES ($1,$2,$3,$4,$5) ', [user.id, product_info.vendor_id, product_info.id,product.quantity,finalPrice]) 
 		let cartdelete = client.query('DELETE FROM cart WHERE cart.id = $1', [product.id])
 	}
 	console.log("USER BALANCE: "+user.balance);
@@ -817,12 +815,9 @@ app.get('/api/checkout/:id', async (req,res)=>{
 
 
 	return res.status(201).send({status : 'success'})
-    // user_id INT REFERENCES Users(id) ON DELETE CASCADE NOT NULL,
-    // vendor_id INT REFERENCES Users(id) ON DELETE CASCADE NOT NULL,
-    // product_id INT REFERENCES Products(id) ON DELETE CASCADE NOT NULL,
-    // quantity INT NOT NULL,
-    // total DECIMAL(10, 2) NOT NULL,
 });
+
+// endpoint per ritornare il carrello
 app.get('/api/get_cart/:id' , async (req,res) => {
 	const {id} = req.params;
 	const user = await getUserBySessID(id);
@@ -861,7 +856,7 @@ app.get('/api/get_cart/:id' , async (req,res) => {
 
 
 
-
+// 
 app.get('/profile/:id' , async (req,res) => {
 	const {id} = req.params;
 	const user = await getUserBySessID(id);
@@ -882,7 +877,7 @@ app.get('/profile/:id' , async (req,res) => {
 });
 
 
-
+// endpoint per gestire la verifica id un account, questo link viene inviato via email
 app.get('/verify', async (req,res) => {
 	const token = req.query.token;
 	// console.log(token);
@@ -905,6 +900,7 @@ app.get('/verify', async (req,res) => {
 	}
 });
 
+// endpoint per gestire l' admin panel
 app.get('/admin_panel/:id' , async (req,res) => {
 	const {id} = req.params;
 	const user = await getUserBySessID(id);
@@ -921,6 +917,7 @@ app.get('/admin_panel/:id' , async (req,res) => {
 	}
 });
 
+// endpoint per gestire l' admin panel
 app.get('/admin/:id/from_admin_panel' ,async (req,res) => {
 	const {id} = req.params;
 
@@ -932,6 +929,12 @@ app.get('/admin/:id/from_admin_panel' ,async (req,res) => {
 	//   	res.sendFile(path.join(__dirname, 'public/no_auth.html'));
 	// }
 
+});
+
+// vari handler per get a varie pagine
+
+app.get('/', function(req, res) {
+	res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
 app.get('/login', (req,res) => {
